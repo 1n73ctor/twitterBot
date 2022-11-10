@@ -19,7 +19,7 @@ var T = new Twit({
 
 import Binance from 'node-binance-api'
 // const client = new Client("AAAAAAAAAAAAAAAAAAAAAGaLbwEAAAAARMag4WgXWRQQh%2B1rasdFPNlsrew%3DExCnUZfYlEvQuz0X2J4uB3aNJOVAgmma24RZ620TX3eqG1lOgl");
-// const twitterClient =  new TwitterApi("AAAAAAAAAAAAAAAAAAAAAGaLbwEAAAAARMag4WgXWRQQh%2B1rasdFPNlsrew%3DExCnUZfYlEvQuz0X2J4uB3aNJOVAgmma24RZ620TX3eqG1lOgl");
+const twitterClient =  new TwitterApi("AAAAAAAAAAAAAAAAAAAAAGaLbwEAAAAARMag4WgXWRQQh%2B1rasdFPNlsrew%3DExCnUZfYlEvQuz0X2J4uB3aNJOVAgmma24RZ620TX3eqG1lOgl");
 
 const binance = new Binance().options({
     APIKEY: 'oHQoHhIsQJEZ3m8FtQk5fjqgeXCufCkrXQFo8qqpr6XregUDp68w72C4xt8HycSk',
@@ -29,19 +29,28 @@ const binance = new Binance().options({
 
   console.log('App Running.....');
 
+  const getUser = async () => {
+    let user = await twitterClient.v2.userByUsername("elonmusk")
+    console.log(user);
+  }
+  // console.log(getUser());
   const BinanceApi = async() => {
     let info = await binance.futuresMarkPrice('DOGEUSDT')
     let currentValue = (1 / info.markPrice) * 10;
     console.log(currentValue);
     console.log(await binance.futuresMarketBuy("DOGEUSDT", currentValue.toFixed()));
   }
-
+//to start trade
 // BinanceApi()
-const newStream  = T.stream('statuses/filter',  {follow: '442913493'})
+
+
+const newStream  = T.stream('statuses/filter',  {follow: '44196397',})
 
 let newTweet;
 const getTweetsStream = async() => {
     newStream.on('tweet', function (tweet) {
+      // console.log(tweet.user.id);
+      if(tweet.user.id != 44196397) return
         console.log(tweet.text);
         newTweet = tweet.text;
         const refineTweet = tweet.text.toLowerCase()
